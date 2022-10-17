@@ -130,3 +130,5 @@ static __inline__ void memset128(void* dst, const uint8_t value) {
     dst64[i] = val;
   }
 }
+
+unsigned long long wasm_input(int);

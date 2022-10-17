@@ -1,4 +1,0 @@
-rule cc
-  command = gcc -c $in -o $out
-
-build sha256.o: cc sha256.c

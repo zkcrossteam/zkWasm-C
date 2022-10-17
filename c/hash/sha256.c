@@ -54,32 +54,32 @@ static const uint32_t rhash_k256[64] = {
 };
 
 /* The SHA256/224 functions defined by FIPS 180-3, 4.1.2 */
-/* Optimized version of Ch(x,y,z)=((x & y) | (~x & z)) */
-uint32_t Ch(uint32_t x, uint32_t y, uint32_t z);
-// #define Ch(x, y, z) ((z) ^ ((x) & ((y) ^ (z))))
-/* Optimized version of Maj(x,y,z)=((x & y) ^ (x & z) ^ (y & z)) */
-uint32_t Maj(uint32_t x, uint32_t y, uint32_t z);
-// #define Maj(x, y, z) (((x) & (y)) ^ ((z) & ((x) ^ (y))))
+/* Optimized version of zkwasm_sha256_ch(x,y,z)=((x & y) | (~x & z)) */
+uint32_t zkwasm_sha256_ch(uint32_t x, uint32_t y, uint32_t z);
+//#define zkwasm_sha256_ch(x, y, z) ((z) ^ ((x) & ((y) ^ (z))))
+/* Optimized version of zkwasm_sha256_maj(x,y,z)=((x & y) ^ (x & z) ^ (y & z)) */
+uint32_t zkwasm_sha256_maj(uint32_t x, uint32_t y, uint32_t z);
+//#define zkwasm_sha256_maj(x, y, z) (((x) & (y)) ^ ((z) & ((x) ^ (y))))
 
-//#define Sigma0(x) (ROTR32((x), 2) ^ ROTR32((x), 13) ^ ROTR32((x), 22))
-uint32_t Sigma0(uint32_t x);
-//#define Sigma1(x) (ROTR32((x), 6) ^ ROTR32((x), 11) ^ ROTR32((x), 25))
-uint32_t Sigma1(uint32_t x);
-//#define sigma0(x) (ROTR32((x), 7) ^ ROTR32((x), 18) ^ ((x) >> 3))
-uint32_t sigma0(uint32_t x);
-//#define sigma1(x) (ROTR32((x), 17) ^ ROTR32((x), 19) ^ ((x) >> 10))
-uint32_t sigma1(uint32_t x);
+//#define zkwasm_sha256_lsigma0(x) (ROTR32((x), 2) ^ ROTR32((x), 13) ^ ROTR32((x), 22))
+uint32_t zkwasm_sha256_lsigma0(uint32_t x);
+//#define zkwasm_sha256_lsigma1(x) (ROTR32((x), 6) ^ ROTR32((x), 11) ^ ROTR32((x), 25))
+uint32_t zkwasm_sha256_lsigma1(uint32_t x);
+//#define zkwasm_sha256_ssigma0(x) (ROTR32((x), 7) ^ ROTR32((x), 18) ^ ((x) >> 3))
+uint32_t zkwasm_sha256_ssigma0(uint32_t x);
+//#define zkwasm_sha256_ssigma1(x) (ROTR32((x), 17) ^ ROTR32((x), 19) ^ ((x) >> 10))
+uint32_t zkwasm_sha256_ssigma1(uint32_t x);
 
 /* Recalculate element n-th of circular buffer W using formula
- *   W[n] = sigma1(W[n - 2]) + W[n - 7] + sigma0(W[n - 15]) + W[n - 16]; */
+ *   W[n] = zkwasm_sha256_ssigma1(W[n - 2]) + W[n - 7] + zkwasm_sha256_ssigma0(W[n - 15]) + W[n - 16]; */
 #define RECALCULATE_W(W, n) \
   (W[n] +=                  \
-   (sigma1(W[(n - 2) & 15]) + W[(n - 7) & 15] + sigma0(W[(n - 15) & 15])))
+   (zkwasm_sha256_ssigma1(W[(n - 2) & 15]) + W[(n - 7) & 15] + zkwasm_sha256_ssigma0(W[(n - 15) & 15])))
 
 #define ROUND(a, b, c, d, e, f, g, h, k, data)              \
   {                                                         \
-    uint32_t T1 = h + Sigma1(e) + Ch(e, f, g) + k + (data); \
-    d += T1, h = T1 + Sigma0(a) + Maj(a, b, c);             \
+    uint32_t T1 = h + zkwasm_sha256_lsigma1(e) + zkwasm_sha256_ch(e, f, g) + k + (data); \
+    d += T1, h = T1 + zkwasm_sha256_lsigma0(a) + zkwasm_sha256_maj(a, b, c);             \
   }
 #define ROUND_1_16(a, b, c, d, e, f, g, h, n) \
   ROUND(a, b, c, d, e, f, g, h, rhash_k256[n], W[n] = bswap_32(block[n]))
@@ -247,7 +247,7 @@ void Hash_Update(uint32_t size) {
  *
  */
 WASM_EXPORT
-void Hash_Final() {
+void Hash_Final(uint8_t* output) {
   uint32_t index = ((uint32_t)ctx->length & 63) >> 2;
   uint32_t shift = ((uint32_t)ctx->length & 3) * 8;
 
@@ -281,7 +281,7 @@ void Hash_Final() {
   }
 
   for (uint8_t i = 0; i < ctx->digest_length; i++) {
-    main_buffer[i] = *(((uint8_t*)ctx->hash) + i);
+    output[i] = *(((uint8_t*)ctx->hash) + i);
   }
 }
 
@@ -293,9 +293,17 @@ uint8_t* Hash_GetState() {
   return (uint8_t*) ctx;
 }
 
+/*
 WASM_EXPORT
-void Hash_Calculate(uint32_t length, uint32_t initParam) {
+void Hash_Calculate() {
+//  uint32_t length = (uint32_t)wasm_input(1);
+//  uint32_t initParam = (uint32_t)wasm_input(1);
+
+  uint32_t initParam = 0;
+  uint32_t length = 0;
+
   Hash_Init(initParam);
   Hash_Update(length);
   Hash_Final();
 }
+*/
