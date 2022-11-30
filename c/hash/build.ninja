@@ -1,8 +1,0 @@
-rule cc
-  command = gcc -g -c $in -o $out
-
-rule ar
-  command = ar rcs $out $in
-
-build sha256.o: cc sha256.c
-build libzkwasm_clib_sha256.a: ar sha256.o
