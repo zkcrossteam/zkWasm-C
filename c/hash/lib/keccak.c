@@ -1,4 +1,6 @@
+#include "zkwasmsdk.h"
 #include "hash-wasm.h"
+#include "stdint.h"
 
 /* 64 bitwise rotation to left */
 #define ROTL64(x, y) (((x) << (y)) | ((x) >> (64 - (y))))
