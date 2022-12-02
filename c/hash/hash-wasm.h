@@ -132,3 +132,11 @@ static __inline__ void memset128(void* dst, const uint8_t value) {
 }
 
 unsigned long long wasm_input(int);
+uint64_t wasm_public_input()
+{
+  return wasm_input(1);
+}
+uint64_t wasm_private_input()
+{
+  return wasm_input(0);
+}

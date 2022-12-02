@@ -4,5 +4,9 @@ rule cc
 rule ar
   command = ar rcs $out $in
 
-build sha256.o: cc sha256.c
-build libzkwasm_clib_sha256.a: ar sha256.o
+rule wasm
+  command = clang  -flto -O3 -nostdlib -fno-builtin -ffreestanding -mexec-model=reactor --target=wasm32 -Wl,--stack-first -Wl,--strip-all -Wl,--initial-memory=131072 -Wl,--max-memory=131072 -Wl,--no-entry -Wl,--allow-undefined -Wl,--compress-relocations -Wl,--export-dynamic $in -o $out
+
+build keccak.o: cc keccak.c
+build libzkwasm_clib_keccak.a: ar keccak.o
+build keccak.wasm: wasm keccak.c

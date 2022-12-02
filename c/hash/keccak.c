@@ -1,4 +1,5 @@
 #include "hash-wasm.h"
+// #include <assert.h>
 
 /* 64 bitwise rotation to left */
 #define ROTL64(x, y) (((x) << (y)) | ((x) >> (64 - (y))))
@@ -313,4 +314,31 @@ int sha3_256(uint8_t* M, int l, uint8_t* O)
 int sha3_224(uint8_t* M, int l, uint8_t* O)
 {
   return keccak(1152, 448, 224, l, M, O);
+}
+
+void keccak_sha3_256(uint32_t msg_len, uint8_t *msg, uint8_t *expect_hash)
+{
+  uint8_t hash_final[32];
+  sha3_256(msg, msg_len, hash_final);
+  // for (uint32_t i = 0; i < 32; i++) {
+  //   assert(hash_final[i] == expect_hash[i]);
+  // }
+}
+
+WASM_EXPORT
+void keccak_digest()
+{
+  uint32_t msg_len;
+  uint8_t msg[1024];
+  uint8_t expect_hash[32];
+  msg_len = (uint32_t)wasm_private_input();
+  for (uint32_t i = 0; i < msg_len; i++)
+  {
+      msg[i] = (uint8_t)wasm_private_input();
+  }
+  for (uint32_t i = 0; i < 32; i++)
+  {
+      expect_hash[i] = (uint8_t)wasm_public_input();
+  }
+  keccak_sha3_256(msg_len, msg, expect_hash);
 }
