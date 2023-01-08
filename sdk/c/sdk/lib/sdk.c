@@ -5,6 +5,7 @@ void assert(int cond)
     if (!cond) __builtin_unreachable();
 }
 
+#if defined(__wasm__)
 void *memcpy(void *dst, const void *src, uint32_t cnt)
 {
   uint8_t *destination = dst;
@@ -16,3 +17,4 @@ void *memcpy(void *dst, const void *src, uint32_t cnt)
   }
   return dst;
 }
+#endif

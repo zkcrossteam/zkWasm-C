@@ -20,4 +20,6 @@ make -C $TOP_PATH/c/hash/lib -f $MAKEFILE
 
 ALL_LIBS=$(find $TOP_PATH/c/*/lib/ -type f -name "*.wasm")
 
-$WASMLD $ALL_LIBS -r -o $1
+echo $ALL_LIBS
+
+$WASMLD -r $ALL_LIBS -o $1

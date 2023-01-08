@@ -12,7 +12,6 @@ struct rlpItem *decodeString(uint8_t *stream, int start, int length, struct rlpI
 
 
 
-
 struct rlpItem *decodeList(uint8_t *stream, int start, int length, struct rlpItemAllocator *itemAllocator, int *listLength) {
     if(length == 0) {
         return NULL;
