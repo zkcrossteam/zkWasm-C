@@ -35,19 +35,19 @@ void *memcpy(void *dst, const void *src, uint32_t cnt);
 #endif
 
 /* Convert list of u64 into bytes */
-static __inline__ void read_bytes_from_u64(void *dst, int byte_length)
+static __inline__ void read_bytes_from_u64(void *dst, int byte_length, uint32_t p)
 {
     uint64_t *dst64 = (uint64_t *)dst;
     for (int i = 0; i * 8 < byte_length; i++)
     {
         if (i * 8 + 8 < byte_length)
         {
-            dst64[i] = wasm_public_input();
+            dst64[i] = wasm_input(p);
         }
         else
         {
             // less then 16 bytes on demand
-            uint64_t uint64_cache = wasm_public_input();
+            uint64_t uint64_cache = wasm_input(p);
             uint8_t *u8_p = (uint8_t *)&uint64_cache;
             for (int j = i * 8; j < byte_length; j++)
             {
