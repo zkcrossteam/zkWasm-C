@@ -1,5 +1,4 @@
 #ifndef __ZKWASM_RLP__
-
 #define __ZKWASM_RLP__
 
 #define SINGLE_CHAR 1
@@ -30,11 +29,7 @@ struct rlpItemAllocator {
 };
 
 
-struct rlpItem* allocRlpItem(struct rlpItemAllocator *itemAllocator) {
-    uint8_t pos = itemAllocator->pos;
-    itemAllocator->pos++;
-    return &itemAllocator->items[pos-1];
-}
+struct rlpItem* allocRlpItem(struct rlpItemAllocator *itemAllocator);
 
 static inline int decodeLength(unsigned char *stream, int start, int length) {
     int sum = 0;

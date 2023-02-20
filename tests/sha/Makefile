@@ -1,5 +1,6 @@
 LIBS  = -lkernel32 -luser32 -lgdi32 -lopengl32
-CFLAGS = -Wall -I../sdk/c/sdk/include/ -I../sdk/c/hash/include/
+SDK_DIR = ../../sdk
+CFLAGS = -Wall -I$(SDK_DIR)/c/sdk/include/ -I$(SDK_DIR)/c/hash/include/
 
 # Should be equivalent to your list of C files, if you don't build selectively
 CFILES = $(wildcard *.c)
@@ -11,12 +12,12 @@ FLAGS = -flto -O3 -nostdlib -fno-builtin -ffreestanding -mexec-model=reactor --t
 all: output.wasm
 
 sdk.wasm:
-	sh ../sdk/scripts/build.sh sdk.wasm
+	sh $(SDK_DIR)/scripts/build.sh sdk.wasm
 
 output.wasm: $(CFILES ) sdk.wasm
 	$(CLANG) -o $@ $(CFILES) sdk.wasm $(FLAGS) $(CFLAGS)
 
 
 clean:
-	sh ../sdk/scripts/clean.sh
+	sh $(SDK_DIR)/scripts/clean.sh
 	rm -f *.wasm *.wat

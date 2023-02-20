@@ -10,7 +10,11 @@ struct rlpItem *decodeString(uint8_t *stream, int start, int length, struct rlpI
     return curr;
 }
 
-
+struct rlpItem* allocRlpItem(struct rlpItemAllocator *itemAllocator) {
+    uint8_t pos = itemAllocator->pos;
+    itemAllocator->pos++;
+    return &itemAllocator->items[pos-1];
+}
 
 struct rlpItem *decodeList(uint8_t *stream, int start, int length, struct rlpItemAllocator *itemAllocator, int *listLength) {
     if(length == 0) {
