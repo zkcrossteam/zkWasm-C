@@ -7,22 +7,21 @@ CFILES = $(wildcard *.c)
 ifeq ($(CLANG),)
 CLANG=clang-15
 endif
-FLAGS = -flto -O3 -nostdlib -fno-builtin -ffreestanding -mexec-model=reactor --target=wasm32 -Wl,--strip-all -Wl,--initial-memory=131072 -Wl,--max-memory=131072 -Wl,--no-entry -Wl,--allow-undefined -Wl,--export-dynamic
+FLAGS = -flto -O3 -nostdlib -fno-builtin -ffreestanding -mexec-model=reactor --target=wasm32 -Wl,--initial-memory=131072 -Wl,--strip-all -Wl,--max-memory=131072 -Wl,--no-entry -Wl,--allow-undefined -Wl,--export-dynamic
 
 all: output.wasm
 
 inner.wasm: inner.ts
-	asc inner.ts -O --runtime stub --noAssert --lib -o inner_pre.wasm
-	wasm2wat inner_pre.wasm -o inner.wat
-	wat2wasm inner.wat -r -o inner.wasm
+	asc inner.ts -o inner_pre.wasm
+	wasm-opt -Oz inner_pre.wasm -o inner_pre.wasm
+	wasm2wat inner_pre.wasm -o inner_pre.wat --inline-exports --generate-names
+	wat2wasm inner_pre.wat -r -o inner.wasm
 
-sdk-final.wasm: inner.wasm
+sdk.wasm: inner.wasm
 	sh $(SDK_DIR)/scripts/build.sh sdk.wasm
-	wasm-ld-15 -r sdk.wasm inner.wasm -o sdk-final.wasm
 
-output.wasm:# $(CFILES ) sdk-final.wasm inner.wasm
-	$(CLANG) -o $@ $(CFILES) sdk-final.wasm $(FLAGS) $(CFLAGS)
-
+output.wasm: $(CFILES ) sdk.wasm inner.wasm
+	$(CLANG) -o $@ main.c sdk.wasm inner.wasm $(FLAGS) $(CFLAGS)
 
 clean:
 	sh $(SDK_DIR)/scripts/clean.sh
