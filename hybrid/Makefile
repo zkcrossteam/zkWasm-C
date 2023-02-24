@@ -12,7 +12,7 @@ FLAGS = -flto -O3 -nostdlib -fno-builtin -ffreestanding -mexec-model=reactor --t
 all: output.wasm
 
 inner.wasm: inner.ts
-	asc inner.ts -o inner_pre.wasm
+	asc inner.ts -o inner_pre.wasm --runtime stub --use abort=inner/crash
 	wasm-opt -Oz inner_pre.wasm -o inner_pre.wasm
 	wasm2wat inner_pre.wasm -o inner_pre.wat --inline-exports --generate-names
 	wat2wasm inner_pre.wat -r -o inner.wasm
@@ -20,7 +20,7 @@ inner.wasm: inner.ts
 sdk.wasm: inner.wasm
 	sh $(SDK_DIR)/scripts/build.sh sdk.wasm
 
-output.wasm: $(CFILES ) sdk.wasm inner.wasm
+output.wasm: $(CFILES) sdk.wasm inner.wasm
 	$(CLANG) -o $@ main.c sdk.wasm inner.wasm $(FLAGS) $(CFLAGS)
 
 clean:
