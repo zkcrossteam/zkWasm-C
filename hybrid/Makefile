@@ -7,14 +7,14 @@ CFILES = $(wildcard *.c)
 ifeq ($(CLANG),)
 CLANG=clang-15
 endif
-FLAGS = -flto -O3 -nostdlib -fno-builtin -ffreestanding -mexec-model=reactor --target=wasm32 -Wl,--initial-memory=131072 -Wl,--strip-all -Wl,--max-memory=131072 -Wl,--no-entry -Wl,--allow-undefined -Wl,--export-dynamic
+FLAGS = -flto -O3 -nostdlib -fno-builtin -ffreestanding -mexec-model=reactor --target=wasm32 -Wl,--initial-memory=131072 -Wl,--strip-all -Wl,--max-memory=131072 -Wl,--no-entry -Wl,--allow-undefined -Wl,--export-dynamic -Wl,--features=mutable-globals
 
 all: output.wasm
 
 inner.wasm: inner.ts
-	asc inner.ts -o inner_pre.wasm --runtime stub --use abort=inner/crash
-	wasm-opt -Oz inner_pre.wasm -o inner_pre.wasm
-	wasm2wat inner_pre.wasm -o inner_pre.wat --inline-exports --generate-names
+	asc inner.ts -o inner_pre_pre.wasm --runtime stub --use abort=inner/crash --disable bulk-memory --disable mutable-globals
+	wasm-opt -Oz inner_pre_pre.wasm -o inner_pre.wasm --disable-bulk-memory --disable-mutable-globals
+	wasm2wat inner_pre.wasm -o inner_pre.wat --inline-exports --generate-names --disable-bulk-memory --disable-mutable-globals
 	wat2wasm inner_pre.wat -r -o inner.wasm
 
 sdk.wasm: inner.wasm
