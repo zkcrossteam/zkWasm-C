@@ -5,7 +5,7 @@
 #include "rlp.h"
 
 extern uint32_t select();
-uint8_t buf[1024];
+uint8_t buf[1200];
 uint8_t *cursor;
 
 __attribute__((visibility("default")))

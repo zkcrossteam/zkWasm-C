@@ -53,31 +53,29 @@ static inline int decodeLength(uint8_t *stream, int start, int end) {
 
 static inline uint8_t decodeType(uint8_t *stream, int start, int *lengthBytes, int* dataLength) {
     uint8_t ch = stream[start];
-    if(ch >= 0x00 && ch <= 0x7f) {
+    if(ch <= 0x7f) {
         *lengthBytes = 0;
         *dataLength = 0;
         return SINGLE_CHAR;
-    } else if(ch >= 0x80 && ch <= 0xb7) {
+    } else if(ch <= 0xb7) {
         *lengthBytes = 0;
         *dataLength = stream[start] - 0x80;
         return SHORT_STRING;
     }
-    else if(ch >= 0xb8 && ch <= 0xbf) {
+    else if(ch <= 0xbf) {
         *lengthBytes = stream[start] - 0xb7;
         *dataLength = decodeLength(stream, start + 1, start + *lengthBytes);
         return LONG_STRING;
     }
-    else if(ch >= 0xc0 && ch <= 0xf7) {
+    else if(ch <= 0xf7) {
         *lengthBytes = 0;
         *dataLength = stream[start] - 0xc0;
         return SHORT_LIST;
     }
-    else if(ch >= 0xf8 && ch <= 0xff) {
+
         *lengthBytes = stream[start] - 0xf7;
         *dataLength = decodeLength(stream, start + 1, start + *lengthBytes);
         return LONG_LIST;
-    }
-    else return INVALID;
 }
 
 struct rlpItem *decode(uint8_t *stream, int start, struct rlpItemAllocator *itemAllocator);
