@@ -22,13 +22,14 @@ int zkmain() {
     struct rlpItem *root = decode(buf, 0, &itemAllocator);
     struct rlpItem *anchor = root->firstChild;
     int sc = 0;
-    for (int i=0; i < root->len; i++) {
+    while (anchor->next) {
        if(anchor->isString) {
            cursor = (uint8_t*)(buf + anchor->startPos);
            if(select()) {
                sc++;
            }
        }
+       anchor = anchor->next;
     }
     return sc;
 }
