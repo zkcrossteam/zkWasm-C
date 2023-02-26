@@ -1,5 +1,5 @@
 LIBS  = -lkernel32 -luser32 -lgdi32 -lopengl32
-SDK_DIR = ../sdk
+SDK_DIR = ../../sdk
 CFLAGS = -Wall -I$(SDK_DIR)/c/sdk/include/ -I$(SDK_DIR)/c/hash/include/ -I$(SDK_DIR)/c/rlp/include/
 
 # Should be equivalent to your list of C files, if you don't build selectively
