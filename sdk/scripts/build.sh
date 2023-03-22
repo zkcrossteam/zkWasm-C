@@ -17,7 +17,7 @@ fi
 make -C $TOP_PATH/c/sdk/lib -f $MAKEFILE
 make -C $TOP_PATH/c/rlp/lib -f $MAKEFILE
 make -C $TOP_PATH/c/hash/lib -f $MAKEFILE
-make -C $TOP_PATH/c/bls/lib -f $MAKEFILE
+make -C $TOP_PATH/c/ecc/lib -f $MAKEFILE
 
 ALL_LIBS=$(find $TOP_PATH/c/*/lib/ -type f -name "*.wasm")
 
