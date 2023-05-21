@@ -16,7 +16,7 @@ static __inline__ void kv_setroot(uint64_t *root)
   }
 }
 
-static __inline__ void kv_getroot(uint64_t *root, uint64_t *data)
+static __inline__ void kv_getroot(uint64_t *data)
 {
   for (int i=0; i<DATA64_SIZE; i++) {
     data[i] = kvpair_getroot();

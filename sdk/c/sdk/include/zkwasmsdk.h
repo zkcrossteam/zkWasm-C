@@ -28,6 +28,7 @@ static inline uint64_t wasm_private_input()
 
 void assert(int cond);
 extern void require(int cond);
+extern void log(uint64_t v);
 
 // Sometimes LLVM emits these functions during the optimization step
 // even with -nostdlib -fno-builtin flags
