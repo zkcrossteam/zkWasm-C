@@ -114,4 +114,8 @@ static __inline__ void memset128(void *dst, const uint8_t value)
   }
 }
 
-void SHA256_Digest(uint8_t *output, uint32_t size, const uint8_t *msg);
+void sha256_new(uint64_t x);
+void sha256_push(uint64_t x);
+uint64_t sha256_finalize(void);
+
+void sha256(uint8_t* data, uint32_t size, uint64_t* r);
