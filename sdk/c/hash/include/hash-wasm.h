@@ -119,3 +119,9 @@ void sha256_push(uint64_t x);
 uint64_t sha256_finalize(void);
 
 void sha256(uint8_t* data, uint32_t size, uint64_t* r);
+
+void poseidon_new(uint64_t x);
+void poseidon_push(uint64_t x);
+uint64_t poseidon_finalize(void);
+
+void poseidon(uint64_t* data, uint32_t size, uint64_t* r);

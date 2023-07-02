@@ -3,10 +3,6 @@
 
 #define sha256_block_size 64
 #define sha256_hash_size 32
-#define sha224_hash_size 28
-#define ROTR32(dword, n) ((dword) >> (n) ^ ((dword) << (32 - (n))))
-#define bswap_32(x) __builtin_bswap32(x)
-
 
 void sha256(uint8_t* data, uint32_t size, uint64_t* r)
 {
