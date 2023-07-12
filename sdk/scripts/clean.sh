@@ -11,4 +11,4 @@ make clean -C $TOP_PATH/c/sdk/lib -f $MAKEFILE
 make clean -C $TOP_PATH/c/rlp/lib -f $MAKEFILE
 make clean -C $TOP_PATH/c/hash/lib -f $MAKEFILE
 make clean -C $TOP_PATH/c/ecc/lib -f $MAKEFILE
-make clean -C $TOP_PATH/c/kvpair/lib -f $MAKEFILE
+#make clean -C $TOP_PATH/c/kvpair/lib -f $MAKEFILE
