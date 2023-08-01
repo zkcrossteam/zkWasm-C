@@ -2,19 +2,19 @@
 #include <stdint.h>
 #include <stddef.h>
 #include "kvpair.h"
+void wasm_dbg(uint64_t);
 
 __attribute__((visibility("default")))
 int zkmain() {
-    uint8_t root[32] = {166, 157, 178, 62, 35, 83, 140, 56, 9, 235, 134, 184, 20, 145, 63, 43, 245, 186, 75, 233, 43, 42, 187, 217, 104, 152, 219, 89, 125, 199, 161, 9};
     uint64_t address = 1;
     uint64_t buf[8];
-    buf[0] = 1;
-    kv_setroot((uint64_t*)root);
-    kv_set(address, buf);
-    kv_get(address, buf);
-    require(buf[0] == 1);
+    buf[0] = 3;
+    struct merkle_store store = default_data_store();
+    merkle_set_data(&store, address, buf, 1);
+    buf[0] = 0;
+    uint32_t len = merkle_get_data(&store, address, buf);
+    require(len == 1);
+    require(buf[0] == 3);
     require(buf[1] == 0);
-    kv_getroot((uint64_t*)root);
-    log(root[0]);
     return 0;
 }

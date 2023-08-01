@@ -1,5 +1,5 @@
 LIBS  = -lkernel32 -luser32 -lgdi32 -lopengl32
-CFLAGS = -Wall -I../../sdk/include/ -I../include/
+CFLAGS = -Wall -I../../sdk/include/ -I../include/ -I../../hash/include/
 
 # Should be equivalent to your list of C files, if you don't build selectively
 CFILES = $(wildcard *.c)

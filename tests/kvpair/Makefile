@@ -1,6 +1,6 @@
 LIBS  = -lkernel32 -luser32 -lgdi32 -lopengl32
 SDK_DIR = ../../sdk
-CFLAGS = -Wall -I$(SDK_DIR)/c/sdk/include/ -I$(SDK_DIR)/c/kvpair/include/
+CFLAGS = -Wall -I$(SDK_DIR)/c/sdk/include/ -I$(SDK_DIR)/c/kvpair/include/ -I$(SDK_DIR)/c/hash/include/
 
 # Should be equivalent to your list of C files, if you don't build selectively
 CFILES = $(wildcard *.c)
