@@ -23,7 +23,7 @@ void bn254msm(uint32_t size, uint64_t* g1, uint64_t *gr) {
         // prepare point and scalar
         bn254_sum_new(i==0);
         for(j=0; j<4; j++) {
-            bn254_sum_coeff(g1[MSMLIMB*i+j]);
+            bn254_sum_scalar(g1[MSMLIMB*i+j]);
         }
         for(j=4; j<(LIMBSZ * 2 + 1); j++) {
             bn254_sum_g1(g1[MSMLIMB*i+j]);
