@@ -26,7 +26,7 @@ void bn254msm(uint32_t size, uint64_t* g1, uint64_t *gr) {
             bn254_sum_coeff(g1[MSMLIMB*i+j]);
         }
         for(j=4; j<(LIMBSZ * 2 + 1); j++) {
-            bn254_msm_g1(g1[MSMLIMB*i+j]);
+            bn254_sum_g1(g1[MSMLIMB*i+j]);
         }
         for(i=0; i<(LIMBSZ * 2 + 1); i++) {
             gr[i] = bn254_sum_finalize();
