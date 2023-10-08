@@ -1,6 +1,6 @@
 #include "bn254.h"
 
-#define LIMBSZ 6
+#define LIMBSZ 5
 
 void bn254pair(uint64_t* g1, uint64_t* g2, uint64_t* g3) {
     int i;
@@ -25,7 +25,7 @@ void bn254msm(uint32_t size, uint64_t* g1, uint64_t *gr) {
         for(j=0; j<4; j++) {
             bn254_sum_scalar(g1[MSMLIMB*i+j]);
         }
-        for(j=4; j<(LIMBSZ * 2 + 1); j++) {
+        for(j=4; j<(LIMBSZ * 2 + 1 + 4); j++) {
             bn254_sum_g1(g1[MSMLIMB*i+j]);
         }
         for(i=0; i<(LIMBSZ * 2 + 1); i++) {
